@@ -5,6 +5,13 @@ import cors from 'cors';
 import routes from './routes.js';
 import './database/index.js';
 
+import { fileURLToPath } from 'node:url';
+import { dirname} from 'node:path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
 class App{
 
     constructor(){
