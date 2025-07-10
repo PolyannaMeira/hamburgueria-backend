@@ -3,7 +3,6 @@ import multer from "multer";
 import multerConfig from "./config/multer.js";
 import authmiddleware from "../src/app/middleware/auth.js";
 
-
 import UserController from "./app/controllers/UserController.js";
 import SessionController from "./app/controllers/SessionController.js";
 import ProductController from "./app/controllers/ProductController.js";
@@ -12,28 +11,45 @@ import OrderController from "./app/controllers/OrderController.js";
 import CreatePaymentIntentController from "./app/controllers/stripe/CreatePaymentIntentController.js";
 
 const routes = new Router();
-
 const upload = multer(multerConfig);
 
+/**
+ * PUBLIC ROUTES
+ * These routes are accessible without authentication
+ */
+
+// User registration
 routes.post('/users', UserController.store);
+
+// User login (session)
 routes.post('/sessions', SessionController.store);
+
+// Get all categories (for the store front)
 routes.get('/categories', CategoryController.index);
 
-routes.use(authmiddleware);
-
-routes.post('/products', upload.single('file'), ProductController.store);
+// Get all products (for the store front)
 routes.get('/products', ProductController.index);
-routes.put('/products/:id', upload.single('file'), ProductController.update);
-routes.delete('/products/:id', ProductController.delete);
 
-routes.post('/categories', upload.single('file'), CategoryController.store);
+/**
+ * PROTECTED ROUTES
+ * These routes require authentication
+ */
 
-routes.put('/categories/:id', upload.single('file'), CategoryController.update);
+// Category management (Admin only)
+routes.post('/categories', authmiddleware, upload.single('file'), CategoryController.store);
+routes.put('/categories/:id', authmiddleware, upload.single('file'), CategoryController.update);
 
-routes.post('/orders', OrderController.store);
-routes.get('/orders', OrderController.index);
-routes.put('/orders/:id', OrderController.update);
+// Product management (Admin only)
+routes.post('/products', authmiddleware, upload.single('file'), ProductController.store);
+routes.put('/products/:id', authmiddleware, upload.single('file'), ProductController.update);
+routes.delete('/products/:id', authmiddleware, ProductController.delete);
 
-routes.post('/create-payment-intent', CreatePaymentIntentController.store);
+// Orders (Require logged-in user)
+routes.post('/orders', authmiddleware, OrderController.store);
+routes.get('/orders', authmiddleware, OrderController.index);
+routes.put('/orders/:id', authmiddleware, OrderController.update);
+
+// Payment intent (Require logged-in user)
+routes.post('/create-payment-intent', authmiddleware, CreatePaymentIntentController.store);
 
 export default routes;
