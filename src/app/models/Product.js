@@ -11,22 +11,20 @@ class Product extends Model {
         url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:4000/product-file/${this.path}`;
+            return `${process.env.BASE_URL}/product-file/${this.path}`;
           },
         },
       },
-      {
-        sequelize,
-      },
+      { sequelize }
     );
     return this;
   }
-  static associate(models){
+
+  static associate(models) {
     this.belongsTo(models.Category, {
       foreignKey: 'category_id',
       as: 'category',
-      
-    })
+    });
   }
 }
 
