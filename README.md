@@ -39,6 +39,7 @@ The focus is on applying best development practices, backend integration, API co
 ## 🛠️ Technologies Used
 
 ### Frontend:
+https://github.com/PolyannaMeira/hamburgueria-frontend
 
 * **React** (with React Hooks)
 * **Axios** (for HTTP requests)
