@@ -44,6 +44,10 @@ class App {
   }
 
   routes() {
+    // simple health check
+    this.app.get('/health', (req, res) => {
+      res.status(200).json({ status: 'ok' });
+    });
     this.app.use(routes);
   }
 }

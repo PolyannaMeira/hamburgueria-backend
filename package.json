@@ -14,7 +14,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "seed": "node scripts/seed.js",
+    "fetch:images": "node scripts/fetch-images.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

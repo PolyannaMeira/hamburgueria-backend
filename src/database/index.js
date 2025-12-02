@@ -20,7 +20,8 @@ class Database{
         .map((model) => model.associate && model.associate(this.conection.models))
     }
     mongo(){
-        this.mongoConnection = mongoose.connect("mongodb://localhost:27018/devburger",);
+        const mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27018/devburger";
+        this.mongoConnection = mongoose.connect(mongoUrl);
     }
 }
 
