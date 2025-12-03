@@ -26,8 +26,6 @@ class App {
     this.routes();
   }
 
-  // resto igual...
-}
 
 
   middlewares() {
