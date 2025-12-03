@@ -11,7 +11,13 @@ class User extends Model {
         password_hash: Sequelize.STRING,
         admin: Sequelize.BOOLEAN,
       },
-      { sequelize },
+      {
+        sequelize,
+        tableName: "users",      // <- minúsculo, igual à migration
+        timestamps: true,
+        createdAt: "created_at", // <- bate com a migration
+        updatedAt: "updated_at",
+      },
     );
     this.addHook("beforeSave", async (user) => {
       if (user.password) {
