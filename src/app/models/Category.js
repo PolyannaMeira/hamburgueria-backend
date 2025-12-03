@@ -1,4 +1,4 @@
-import Sequelize, { Model } from 'sequelize';
+import Sequelize, { Model, DataTypes } from 'sequelize';
 
 class Category extends Model {
   static init(sequelize) {
@@ -13,7 +13,13 @@ class Category extends Model {
           },
         },
       },
-      { sequelize }
+      {
+        sequelize,
+        tableName: "categories",   // <- bate com a migration
+        timestamps: true,
+        createdAt: "created_at",   // <- mapeia pro nome da coluna
+        updatedAt: "updated_at",
+      }
     );
     return this;
   }
