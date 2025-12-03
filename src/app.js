@@ -17,21 +17,16 @@ class App {
 
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://hamburgueria-frontend-polyannas-projects.vercel.app',
+      'https://hamburgueria-frontend.vercel.app',
     ];
 
     this.app.use(
-      cors({
-        origin: (origin, callback) => {
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            callback(new Error('Not allowed by CORS'));
-          }
-        },
-        credentials: true,
-      })
-    );
+  cors({
+    origin: true,       // reflete qualquer origin válido
+    credentials: true,
+  })
+);
+
 
     this.middlewares();
     this.routes();
@@ -44,10 +39,6 @@ class App {
   }
 
   routes() {
-    // simple health check
-    this.app.get('/health', (req, res) => {
-      res.status(200).json({ status: 'ok' });
-    });
     this.app.use(routes);
   }
 }

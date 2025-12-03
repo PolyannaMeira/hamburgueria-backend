@@ -26,42 +26,41 @@ const images = [
   'category-burgers.jpg',
   'category-drinks.jpg',
   'category-desserts.jpg',
-  'category-starters.jpg'
+  'category-starters.jpg',
 ];
 
 const uploadsDir = path.resolve(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-async function download(url, dest) {
-  // Use global fetch (Node 18+) which follows redirects (302) automatically
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} for ${url}`);
-  }
-  const arrayBuffer = await res.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  await fs.promises.writeFile(dest, buffer);
-}
 
 async function run() {
   try {
-    for (const name of images) {
-      const seed = name.replace(/\.[^.]+$/, '').replace(/[^a-z0-9]+/gi, '-');
-      const url = `https://picsum.photos/seed/${encodeURIComponent(seed)}/800/600`;
-      const dest = path.join(uploadsDir, name);
-      if (fs.existsSync(dest)) {
-        console.log(`skip: ${name} already exists`);
-        continue;
-      }
-      console.log(`fetch: ${name}`);
-      await download(url, dest);
+    if (!fs.existsSync(uploadsDir)) {
+      console.error('Pasta "uploads/" não existe na raiz do projeto.');
+      console.error('Crie a pasta uploads/ e coloque as imagens lá.');
+      process.exit(1);
     }
-    console.log('All images fetched to uploads/.');
+
+    let missing = 0;
+
+    for (const name of images) {
+      const filePath = path.join(uploadsDir, name);
+
+      if (fs.existsSync(filePath)) {
+        console.log(`ok: ${name}`);
+      } else {
+        console.warn(`MISSING: ${name} não encontrado em uploads/`);
+        missing++;
+      }
+    }
+
+    if (missing === 0) {
+      console.log('Todas as imagens estão presentes em uploads/.');
+    } else {
+      console.log(`${missing} imagem(ns) faltando em uploads/.`);
+    }
+
     process.exit(0);
   } catch (err) {
-    console.error('Failed to fetch images:', err);
+    console.error('Erro ao verificar imagens:', err);
     process.exit(1);
   }
 }

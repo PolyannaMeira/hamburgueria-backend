@@ -1,10 +1,11 @@
-'use strict';
-
-/** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('users', {
+  // 1) Dropa a tabela antiga (UUID quebrada)
+  await queryInterface.dropTable("users");
+
+  // 2) Cria de novo do jeito certo
+  await queryInterface.createTable("users", {
     id: {
-       type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
@@ -24,6 +25,7 @@ export async function up(queryInterface, Sequelize) {
     },
     admin: {
       type: Sequelize.BOOLEAN,
+      allowNull: false,
       defaultValue: false,
     },
     created_at: {
@@ -35,10 +37,9 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
   });
-
 }
+
 export async function down(queryInterface) {
-
-  await queryInterface.dropTable('users');
-
+  // Se quiser reverter, só derruba a tabela
+  await queryInterface.dropTable("users");
 }

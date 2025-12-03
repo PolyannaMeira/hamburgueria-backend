@@ -69,6 +69,7 @@ async function run() {
     }
 
     // Admin user
+    /*
     const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@devburger.com';
     const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'devburger123';
     const adminName = process.env.SEED_ADMIN_NAME || 'Admin';
@@ -83,6 +84,7 @@ async function run() {
       if (process.env.SEED_ADMIN_PASSWORD) toUpdate.password = adminPassword;
       await adminUser.update(toUpdate);
     }
+      */
 
     console.log('Seed concluído: categorias, produtos e admin inseridos.');
     process.exit(0);
