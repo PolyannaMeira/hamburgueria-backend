@@ -17,7 +17,7 @@ class App {
 
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://hamburgueria-frontend.vercel.app',
+      'https://hamburgueria-frontend-ochre.vercel.app',
     ];
 
     this.app.use(
