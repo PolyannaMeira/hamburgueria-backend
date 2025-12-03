@@ -15,27 +15,20 @@ class App {
   constructor() {
     this.app = express();
 
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'https://hamburgueria-frontend-polyannas-projects.vercel.app',
-    ];
-
     this.app.use(
       cors({
-        origin: (origin, callback) => {
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            callback(new Error('Not allowed by CORS'));
-          }
-        },
-        credentials: true,
+        origin: true,        // reflete qualquer origin
+        credentials: true,   // permite cookies/headers de auth
       })
     );
 
     this.middlewares();
     this.routes();
   }
+
+  // resto igual...
+}
+
 
   middlewares() {
     this.app.use(express.json());
