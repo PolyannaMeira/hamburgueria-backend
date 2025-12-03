@@ -13,21 +13,38 @@ class Database{
         this.init();
         this.mongo()
     }
-    init(){
-        // Prefer DATABASE_URL in production (e.g., Render/Neon/Supabase)
-        const options = { ...configDatabase };
-        if (process.env.DATABASE_URL) {
-            // Remove non-option helper key to avoid confusion
-            delete options.url;
-            this.conection = new Sequelize(process.env.DATABASE_URL, options);
-        } else {
-            this.conection = new Sequelize(
-                configDatabase.database,
-                configDatabase.username,
-                configDatabase.password,
-                options
-            );
+    init() {
+    let sequelize;
+
+    if (process.env.DATABASE_URL) {
+      // PRODUÇÃO (Render, etc) => usa apenas DATABASE_URL
+      sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: "postgres",
+        logging: false,
+        dialectOptions: {
+          
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
+      });
+    } else {
+      // DESENVOLVIMENTO (Docker local) => usa configDatabase
+      sequelize = new Sequelize(
+        configDatabase.database,
+        configDatabase.username,
+        configDatabase.password,
+        {
+          host: configDatabase.host,
+          port: configDatabase.port,
+          dialect: configDatabase.dialect,
+          logging: false,
         }
+      );
+    }
+
+    this.connection = sequelize;
         models
         .map((model) => model.init(this.conection))
         .map((model) => model.associate && model.associate(this.conection.models))
