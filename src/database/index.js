@@ -14,15 +14,13 @@ class Database{
         this.mongo()
     }
     init() {
-    let sequelize;
-
+    
     if (process.env.DATABASE_URL) {
       // PRODUÇÃO (Render, etc) => usa apenas DATABASE_URL
-      sequelize = new Sequelize(process.env.DATABASE_URL, {
+      this.sequelize = new Sequelize(process.env.DATABASE_URL, {
         dialect: "postgres",
         logging: false,
-        dialectOptions: {
-          
+        dialectOptions: {          
           ssl: {
             require: true,
             rejectUnauthorized: false,
@@ -31,7 +29,7 @@ class Database{
       });
     } else {
       // DESENVOLVIMENTO (Docker local) => usa configDatabase
-      sequelize = new Sequelize(
+      this.sequelize = new Sequelize(
         configDatabase.database,
         configDatabase.username,
         configDatabase.password,
@@ -44,10 +42,10 @@ class Database{
       );
     }
 
-    this.connection = sequelize;
+    
         models
-        .map((model) => model.init(this.conection))
-        .map((model) => model.associate && model.associate(this.conection.models))
+        .map((model) => model.init(this.sequelize))
+        .map((model) => model.associate && model.associate(this.sequelize.models))
     }
     mongo() {
   const mongoUrl = process.env.MONGO_URL;
